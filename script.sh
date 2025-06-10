@@ -49,7 +49,6 @@ do
 			wget -c "$dlURL" -O "../$talkName.mp4"
 		fi
 	fi
-	exit 0
 done < "../downloadData"
 
 #cleanup
