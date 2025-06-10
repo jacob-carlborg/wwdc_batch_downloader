@@ -41,9 +41,8 @@ do
 		echo "Video $line ($talkName)"
 		echo "	url: $dlURL"
 		#Great, we download the file
-    wget -c "$dlURL" -O "..$line - $talkName.mp4"
+    wget -c "$dlURL" -O "../$talkName.mp4"
 	fi
-
 done < "../downloadData"
 
 #cleanup
