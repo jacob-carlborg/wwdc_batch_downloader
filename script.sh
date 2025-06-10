@@ -5,6 +5,7 @@ mkdir tmp_download
 cd tmp_download
 
 year=2025
+short_year=${year:2:2}
 #Extract IDs
 echo "Downloading the index"
 wget -q "https://developer.apple.com/videos/wwdc$year/" -O index.html
@@ -26,7 +27,7 @@ do
   # echo "https://developer.apple.com$line"
 
 	#We grab the title of the page then clean it up
-	talkName=$(cat webpage | htmlq -t title | sed -e "s/ \- WWDC25.*//")
+	talkName=$(cat webpage | htmlq -t title | sed -e "s/ \- WWDC$short_year.*//")
 
 	#We grep "_hd_" which bring up the download URL, then some cleanup
 	#If we were to want SD video, all we would have to do is replace _hd_ by _sd_
@@ -40,9 +41,15 @@ do
 	else
 		echo "Video $line ($talkName)"
 		echo "	url: $dlURL"
-		#Great, we download the file
-    wget -c "$dlURL" -O "../$talkName.mp4"
+		# Check if the file already exists
+		if [ -f "../$talkName.mp4" ]; then
+			echo "File '../$talkName.mp4' already exists. Skipping download."
+		else
+			# Great, we download the file
+			wget -c "$dlURL" -O "../$talkName.mp4"
+		fi
 	fi
+	exit 0
 done < "../downloadData"
 
 #cleanup
